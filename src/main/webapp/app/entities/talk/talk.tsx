@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Button, Table } from 'reactstrap';
+import { Button } from 'reactstrap';
 import { JhiItemCount, JhiPagination, getPaginationState } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
+import { faSort, faSortDown, faSortUp, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
@@ -88,6 +88,30 @@ export const Talk = () => {
     return order === ASC ? faSortUp : faSortDown;
   };
 
+  // Add custom CSS for card hover effect
+  useEffect(() => {
+    const style = document.createElement('style');
+    style.innerHTML = `
+      .hover-shadow {
+        transition: all 0.3s ease;
+      }
+      .hover-shadow:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+      }
+      .text-truncate {
+        max-width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    `;
+    document.head.appendChild(style);
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
+
   return (
     <div>
       <h2 id="talk-heading" data-cy="TalkHeading">
@@ -102,91 +126,88 @@ export const Talk = () => {
           </Link>
         </div>
       </h2>
-      <div className="table-responsive">
+      <div className="talk-list-container">
         {talkList && talkList.length > 0 ? (
-          <Table responsive>
-            <thead>
-              <tr>
-                <th className="hand" onClick={sort('id')}>
-                  ID <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
-                </th>
-                <th className="hand" onClick={sort('title')}>
-                  Title <FontAwesomeIcon icon={getSortIconByFieldName('title')} />
-                </th>
-                <th className="hand" onClick={sort('speaker')}>
-                  Speaker <FontAwesomeIcon icon={getSortIconByFieldName('speaker')} />
-                </th>
-                <th className="hand" onClick={sort('abstractText')}>
-                  Abstract Text <FontAwesomeIcon icon={getSortIconByFieldName('abstractText')} />
-                </th>
-                <th>
-                  Room <FontAwesomeIcon icon="sort" />
-                </th>
-                <th>
-                  Timeslot <FontAwesomeIcon icon="sort" />
-                </th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              {talkList.map((talk, i) => (
-                <tr key={`entity-${i}`} data-cy="entityTable">
-                  <td>
-                    <Button tag={Link} to={`/talk/${talk.id}`} color="link" size="sm">
-                      {talk.id}
+          <div className="row">
+            {talkList.map((talk, i) => (
+              <div key={`entity-${i}`} className="col-md-6 col-lg-4 mb-4" data-cy="entityTable">
+                <div className="card h-100 shadow-sm hover-shadow">
+                  <div className="card-header bg-light d-flex justify-content-between align-items-center">
+                    <h5 className="card-title mb-0 text-truncate" title={talk.title}>
+                      {talk.title}
+                    </h5>
+                    <Button tag={Link} to={`/talk/${talk.id}`} color="link" size="sm" className="p-0">
+                      <FontAwesomeIcon icon="eye" />
                     </Button>
-                  </td>
-                  <td>{talk.title}</td>
-                  <td>{talk.speaker}</td>
-                  <td>{talk.abstractText}</td>
-                  <td>{talk.room ? <Link to={`/room/${talk.room.id}`}>{talk.room.name}</Link> : ''}</td>
-                  <td>
-                    {talk.timeslot ? (
-                      <Link to={`/timeslot/${talk.timeslot.id}`}>
-                        {`${new Date(talk.timeslot.start).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' })}. ${new Date(
-                          talk.timeslot.start,
-                        ).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })} - ${new Date(
-                          talk.timeslot.end,
-                        ).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' })}. ${new Date(
-                          talk.timeslot.end,
-                        ).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })}`}
-                      </Link>
-                    ) : (
-                      ''
-                    )}
-                  </td>
-                  <td className="text-end">
-                    <div className="btn-group flex-btn-group-container">
-                      <Button tag={Link} to={`/talk/${talk.id}`} color="info" size="sm" data-cy="entityDetailsButton">
-                        <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">Details</span>
-                      </Button>
-                      <Button
-                        tag={Link}
-                        to={`/talk/${talk.id}/edit?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
-                        color="primary"
-                        size="sm"
-                        data-cy="entityEditButton"
-                      >
-                        <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Bearbeiten</span>
-                      </Button>
-                      <Button
-                        onClick={() =>
-                          (window.location.href = `/talk/${talk.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`)
-                        }
-                        color="danger"
-                        size="sm"
-                        data-cy="entityDeleteButton"
-                      >
-                        <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Löschen</span>
-                      </Button>
+                  </div>
+                  <div className="card-body">
+                    <div className="mb-2">
+                      <strong>Speaker:</strong> {talk.speaker}
                     </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
+                    {talk.abstractText && (
+                      <div className="mb-2">
+                        <p className="card-text text-truncate" title={talk.abstractText}>
+                          {talk.abstractText}
+                        </p>
+                      </div>
+                    )}
+                    <div className="mb-2">
+                      <strong>Room:</strong> {talk.room ? <Link to={`/room/${talk.room.id}`}>{talk.room.name}</Link> : 'Not assigned'}
+                    </div>
+                    <div className="mb-3">
+                      <strong>Time:</strong>{' '}
+                      {talk.timeslot ? (
+                        <Link to={`/timeslot/${talk.timeslot.id}`}>
+                          {`${new Date(talk.timeslot.start).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' })} ${new Date(
+                            talk.timeslot.start
+                          ).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })} - ${new Date(
+                            talk.timeslot.end
+                          ).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })}`}
+                        </Link>
+                      ) : (
+                        'Not scheduled'
+                      )}
+                    </div>
+                  </div>
+                  <div className="card-footer bg-white border-top-0">
+                    <div className="d-flex justify-content-between">
+                      <Button tag={Link} to={`/talk/${talk.id}`} color="info" size="sm" data-cy="entityDetailsButton">
+                        <FontAwesomeIcon icon="eye" /> <span>Details</span>
+                      </Button>
+                      <div>
+                        <Button
+                          tag={Link}
+                          to={`/talk/${talk.id}/edit?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
+                          color="primary"
+                          size="sm"
+                          className="me-1"
+                          data-cy="entityEditButton"
+                        >
+                          <FontAwesomeIcon icon="pencil-alt" />
+                        </Button>
+                        <Button
+                          onClick={() =>
+                            (window.location.href = `/talk/${talk.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`)
+                          }
+                          color="danger"
+                          size="sm"
+                          data-cy="entityDeleteButton"
+                        >
+                          <FontAwesomeIcon icon="trash" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         ) : (
-          !loading && <div className="alert alert-warning">Keine Talks gefunden</div>
+          !loading && (
+            <div className="alert alert-warning">
+              <FontAwesomeIcon icon="info-circle" /> Keine Talks gefunden
+            </div>
+          )
         )}
       </div>
       {totalItems ? (
