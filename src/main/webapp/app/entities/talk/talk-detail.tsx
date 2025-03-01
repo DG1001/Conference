@@ -42,7 +42,11 @@ export const TalkDetail = () => {
           <dt>Room</dt>
           <dd>{talkEntity.room ? talkEntity.room.name : ''}</dd>
           <dt>Timeslot</dt>
-          <dd>{talkEntity.timeslot ? `${talkEntity.timeslot.start} - ${talkEntity.timeslot.end}` : ''}</dd>
+          <dd>
+            {talkEntity.timeslot
+              ? `${new Date(talkEntity.timeslot.start).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' })}. ${new Date(talkEntity.timeslot.start).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })} - ${new Date(talkEntity.timeslot.end).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' })}. ${new Date(talkEntity.timeslot.end).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })}`
+              : ''}
+          </dd>
         </dl>
         <Button tag={Link} to="/talk" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Zurück</span>
