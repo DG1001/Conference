@@ -159,9 +159,9 @@ export const Talk = () => {
                       {talk.timeslot ? (
                         <Link to={`/timeslot/${talk.timeslot.id}`}>
                           {`${new Date(talk.timeslot.start).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' })} ${new Date(
-                            talk.timeslot.start
+                            talk.timeslot.start,
                           ).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })} - ${new Date(
-                            talk.timeslot.end
+                            talk.timeslot.end,
                           ).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })}`}
                         </Link>
                       ) : (
