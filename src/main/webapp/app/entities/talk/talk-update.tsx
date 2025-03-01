@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Button, Col, FormText, Row } from 'reactstrap';
+import { Button, Col, FormText, Row, Card, CardHeader, CardBody } from 'reactstrap';
 import { ValidatedField, ValidatedForm } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -74,86 +74,181 @@ export const TalkUpdate = () => {
           timeslot: talkEntity?.timeslot?.id,
         };
 
+  // Format timeslot display for dropdown
+  const formatTimeslot = timeslot => {
+    if (!timeslot) return '';
+    
+    const startDate = new Date(timeslot.start);
+    const endDate = new Date(timeslot.end);
+    
+    const dateOptions: Intl.DateTimeFormatOptions = { 
+      day: '2-digit', 
+      month: '2-digit',
+      year: 'numeric',
+    };
+    const timeOptions: Intl.DateTimeFormatOptions = { 
+      hour: '2-digit', 
+      minute: '2-digit',
+    };
+    
+    const formattedDate = startDate.toLocaleDateString('de-DE', dateOptions);
+    const startTime = startDate.toLocaleTimeString('de-DE', timeOptions);
+    const endTime = endDate.toLocaleTimeString('de-DE', timeOptions);
+    
+    return `${formattedDate}, ${startTime} - ${endTime}`;
+  };
+
   return (
-    <div>
+    <div className="talk-update-container">
       <Row className="justify-content-center">
         <Col md="8">
-          <h2 id="conferenceApp.talk.home.createOrEditLabel" data-cy="TalkCreateUpdateHeading">
-            Talk erstellen oder bearbeiten
-          </h2>
-        </Col>
-      </Row>
-      <Row className="justify-content-center">
-        <Col md="8">
-          {loading ? (
-            <p>Loading...</p>
-          ) : (
-            <ValidatedForm defaultValues={defaultValues()} onSubmit={saveEntity}>
-              {!isNew ? <ValidatedField name="id" required readOnly id="talk-id" label="ID" validate={{ required: true }} /> : null}
-              <ValidatedField
-                label="Title"
-                id="talk-title"
-                name="title"
-                data-cy="title"
-                type="text"
-                validate={{
-                  required: { value: true, message: 'Dieses Feld wird benötigt.' },
-                }}
-              />
-              <ValidatedField
-                label="Speaker"
-                id="talk-speaker"
-                name="speaker"
-                data-cy="speaker"
-                type="text"
-                validate={{
-                  required: { value: true, message: 'Dieses Feld wird benötigt.' },
-                }}
-              />
-              <ValidatedField
-                label="Abstract Text"
-                id="talk-abstractText"
-                name="abstractText"
-                data-cy="abstractText"
-                type="textarea"
-                validate={{
-                  required: { value: true, message: 'Dieses Feld wird benötigt.' },
-                }}
-              />
-              <ValidatedField id="talk-room" name="room" data-cy="room" label="Room" type="select" required>
-                <option value="" key="0" />
-                {rooms
-                  ? rooms.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.name}
-                      </option>
-                    ))
-                  : null}
-              </ValidatedField>
-              <FormText>Dieses Feld wird benötigt.</FormText>
-              <ValidatedField id="talk-timeslot" name="timeslot" data-cy="timeslot" label="Timeslot" type="select" required>
-                <option value="" key="0" />
-                {timeslots
-                  ? timeslots.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
-                      </option>
-                    ))
-                  : null}
-              </ValidatedField>
-              <FormText>Dieses Feld wird benötigt.</FormText>
-              <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/talk" replace color="info">
-                <FontAwesomeIcon icon="arrow-left" />
-                &nbsp;
-                <span className="d-none d-md-inline">Zurück</span>
-              </Button>
-              &nbsp;
-              <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>
-                <FontAwesomeIcon icon="save" />
-                &nbsp; Speichern
-              </Button>
-            </ValidatedForm>
-          )}
+          <Card className="shadow-sm mb-4">
+            <CardHeader className="bg-primary text-white">
+              <h2 className="mb-0" id="conferenceApp.talk.home.createOrEditLabel" data-cy="TalkCreateUpdateHeading">
+                <FontAwesomeIcon icon={isNew ? "plus-circle" : "edit"} className="me-2" />
+                {isNew ? 'Talk erstellen' : 'Talk bearbeiten'}
+              </h2>
+            </CardHeader>
+            <CardBody>
+              {loading ? (
+                <div className="d-flex justify-content-center">
+                  <div className="spinner-border text-primary" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                </div>
+              ) : (
+                <ValidatedForm defaultValues={defaultValues()} onSubmit={saveEntity}>
+                  {!isNew ? (
+                    <Row className="mb-3">
+                      <Col md="3">
+                        <label className="form-label" htmlFor="talk-id">
+                          ID
+                        </label>
+                      </Col>
+                      <Col md="9">
+                        <ValidatedField name="id" id="talk-id" data-cy="id" type="text" className="form-control" readOnly />
+                      </Col>
+                    </Row>
+                  ) : null}
+                  
+                  <Row className="mb-3">
+                    <Col md="3">
+                      <label className="form-label" htmlFor="talk-title">
+                        <FontAwesomeIcon icon="heading" className="me-1" /> Title *
+                      </label>
+                    </Col>
+                    <Col md="9">
+                      <ValidatedField
+                        id="talk-title"
+                        name="title"
+                        data-cy="title"
+                        type="text"
+                        validate={{
+                          required: { value: true, message: 'Dieses Feld wird benötigt.' },
+                        }}
+                        placeholder="Enter talk title"
+                      />
+                    </Col>
+                  </Row>
+                  
+                  <Row className="mb-3">
+                    <Col md="3">
+                      <label className="form-label" htmlFor="talk-speaker">
+                        <FontAwesomeIcon icon="user" className="me-1" /> Speaker *
+                      </label>
+                    </Col>
+                    <Col md="9">
+                      <ValidatedField
+                        id="talk-speaker"
+                        name="speaker"
+                        data-cy="speaker"
+                        type="text"
+                        validate={{
+                          required: { value: true, message: 'Dieses Feld wird benötigt.' },
+                        }}
+                        placeholder="Enter speaker name"
+                      />
+                    </Col>
+                  </Row>
+                  
+                  <Row className="mb-3">
+                    <Col md="3">
+                      <label className="form-label" htmlFor="talk-abstractText">
+                        <FontAwesomeIcon icon="file-alt" className="me-1" /> Abstract *
+                      </label>
+                    </Col>
+                    <Col md="9">
+                      <ValidatedField
+                        id="talk-abstractText"
+                        name="abstractText"
+                        data-cy="abstractText"
+                        type="textarea"
+                        rows={5}
+                        validate={{
+                          required: { value: true, message: 'Dieses Feld wird benötigt.' },
+                        }}
+                        placeholder="Enter talk abstract"
+                      />
+                    </Col>
+                  </Row>
+                  
+                  <Row className="mb-3">
+                    <Col md="3">
+                      <label className="form-label" htmlFor="talk-room">
+                        <FontAwesomeIcon icon="map-marker-alt" className="me-1" /> Room *
+                      </label>
+                    </Col>
+                    <Col md="9">
+                      <ValidatedField id="talk-room" name="room" data-cy="room" type="select" required>
+                        <option value="" key="0">-- Select Room --</option>
+                        {rooms
+                          ? rooms.map(otherEntity => (
+                              <option value={otherEntity.id} key={otherEntity.id}>
+                                {otherEntity.name}
+                              </option>
+                            ))
+                          : null}
+                      </ValidatedField>
+                      <small className="form-text text-muted">Dieses Feld wird benötigt.</small>
+                    </Col>
+                  </Row>
+                  
+                  <Row className="mb-4">
+                    <Col md="3">
+                      <label className="form-label" htmlFor="talk-timeslot">
+                        <FontAwesomeIcon icon="clock" className="me-1" /> Timeslot *
+                      </label>
+                    </Col>
+                    <Col md="9">
+                      <ValidatedField id="talk-timeslot" name="timeslot" data-cy="timeslot" type="select" required>
+                        <option value="" key="0">-- Select Timeslot --</option>
+                        {timeslots
+                          ? timeslots.map(otherEntity => (
+                              <option value={otherEntity.id} key={otherEntity.id}>
+                                {formatTimeslot(otherEntity)}
+                              </option>
+                            ))
+                          : null}
+                      </ValidatedField>
+                      <small className="form-text text-muted">Dieses Feld wird benötigt.</small>
+                    </Col>
+                  </Row>
+                  
+                  <div className="d-flex justify-content-end gap-2 mt-4">
+                    <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/talk" replace color="secondary">
+                      <FontAwesomeIcon icon="arrow-left" />
+                      &nbsp;
+                      <span>Zurück</span>
+                    </Button>
+                    <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>
+                      <FontAwesomeIcon icon={updating ? "spinner" : "save"} spin={updating} />
+                      &nbsp; Speichern
+                    </Button>
+                  </div>
+                </ValidatedForm>
+              )}
+            </CardBody>
+          </Card>
         </Col>
       </Row>
     </div>
