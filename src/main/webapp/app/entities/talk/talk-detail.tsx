@@ -42,7 +42,7 @@ export const TalkDetail = () => {
           <dt>Room</dt>
           <dd>{talkEntity.room ? talkEntity.room.name : ''}</dd>
           <dt>Timeslot</dt>
-          <dd>{talkEntity.timeslot ? talkEntity.timeslot.id : ''}</dd>
+          <dd>{talkEntity.timeslot ? `${talkEntity.timeslot.start} - ${talkEntity.timeslot.end}` : ''}</dd>
         </dl>
         <Button tag={Link} to="/talk" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Zurück</span>
