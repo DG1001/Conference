@@ -1,0 +1,48 @@
+application {
+  config {
+    baseName conference
+    packageName de.xares.conference
+    authenticationType jwt
+    prodDatabaseType postgresql
+    clientFramework react
+    enableSwaggerCodegen true
+    languages [en, de]
+    nativeLanguage de
+    jhiPrefix jhi
+    skipUserManagement false
+    testFrameworks [cypress]
+    serverPort 8080
+  }
+  entities *
+}
+
+entity Room {
+    name String required
+    capacity Integer
+}
+
+entity Timeslot {
+    start Instant required
+    end Instant required
+}
+
+entity Talk {
+    title String required
+    speaker String required
+    abstractText TextBlob required
+}
+
+// Define relationships
+relationship ManyToOne {
+    Talk{room(name) required} to Room
+}
+
+relationship ManyToOne {
+    Talk{timeslot required} to Timeslot
+}
+
+// Set pagination options
+paginate Room, Timeslot, Talk with pagination
+
+// Set service options
+service all with serviceImpl
