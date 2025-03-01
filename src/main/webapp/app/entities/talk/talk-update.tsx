@@ -40,6 +40,13 @@ export const TalkUpdate = () => {
     dispatch(getTimeslots({}));
   }, []);
 
+  // Debug log to check what's in talkEntity
+  useEffect(() => {
+    if (!isNew && talkEntity) {
+      console.log('Talk entity loaded:', talkEntity);
+    }
+  }, [talkEntity]);
+
   useEffect(() => {
     if (updateSuccess) {
       handleClose();
@@ -69,13 +76,19 @@ export const TalkUpdate = () => {
     if (isNew) {
       return {};
     }
+    
+    // Make sure we have a valid entity with all required fields
+    if (!talkEntity || !talkEntity.id) {
+      return {};
+    }
+    
     return {
       id: talkEntity.id,
-      title: talkEntity.title,
-      speaker: talkEntity.speaker,
-      abstractText: talkEntity.abstractText,
-      room: talkEntity?.room?.id,
-      timeslot: talkEntity?.timeslot?.id,
+      title: talkEntity.title || '',
+      speaker: talkEntity.speaker || '',
+      abstractText: talkEntity.abstractText || '',
+      room: talkEntity.room ? talkEntity.room.id : '',
+      timeslot: talkEntity.timeslot ? talkEntity.timeslot.id : '',
     };
   };
 
@@ -117,7 +130,7 @@ export const TalkUpdate = () => {
                   </div>
                 </div>
               ) : (
-                <ValidatedForm defaultValues={defaultValues()} onSubmit={saveEntity}>
+                <ValidatedForm key={talkEntity.id || 'new'} defaultValues={defaultValues()} onSubmit={saveEntity}>
                   {!isNew ? (
                     <Row className="mb-3">
                       <Col md="3">
