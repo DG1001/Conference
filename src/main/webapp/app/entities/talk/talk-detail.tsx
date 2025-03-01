@@ -26,11 +26,11 @@ export const TalkDetail = () => {
       weekday: 'long',
       day: '2-digit',
       month: '2-digit',
-      year: 'numeric'
+      year: 'numeric',
     };
     const timeOptions: Intl.DateTimeFormatOptions = {
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     };
 
     const formattedDate = startDate.toLocaleDateString('de-DE', dateOptions);
