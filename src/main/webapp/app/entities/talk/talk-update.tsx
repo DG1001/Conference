@@ -65,14 +65,19 @@ export const TalkUpdate = () => {
     }
   };
 
-  const defaultValues = () =>
-    isNew
-      ? {}
-      : {
-          ...talkEntity,
-          room: talkEntity?.room?.id,
-          timeslot: talkEntity?.timeslot?.id,
-        };
+  const defaultValues = () => {
+    if (isNew) {
+      return {};
+    }
+    return {
+      id: talkEntity.id,
+      title: talkEntity.title,
+      speaker: talkEntity.speaker,
+      abstractText: talkEntity.abstractText,
+      room: talkEntity?.room?.id,
+      timeslot: talkEntity?.timeslot?.id,
+    };
+  };
 
   // Format timeslot display for dropdown
   const formatTimeslot = timeslot => {
