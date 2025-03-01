@@ -43,7 +43,7 @@ export const TalkUpdate = () => {
   // Debug log to check what's in talkEntity
   useEffect(() => {
     if (!isNew && talkEntity) {
-      console.log('Talk entity loaded:', talkEntity);
+      console.warn('Talk entity loaded:', talkEntity);
     }
   }, [talkEntity]);
 
@@ -76,12 +76,12 @@ export const TalkUpdate = () => {
     if (isNew) {
       return {};
     }
-    
+
     // Make sure we have a valid entity with all required fields
     if (!talkEntity || !talkEntity.id) {
       return {};
     }
-    
+
     return {
       id: talkEntity.id,
       title: talkEntity.title || '',
