@@ -1,11 +1,8 @@
 import React, { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Button, Col, Row } from 'reactstrap';
-
+import { Button, Col, Row, Card, CardHeader, CardBody, Badge } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-
 import { getEntity } from './talk.reducer';
 
 export const TalkDetail = () => {
@@ -18,45 +15,114 @@ export const TalkDetail = () => {
   }, []);
 
   const talkEntity = useAppSelector(state => state.talk.entity);
+  // Format date and time for display
+  const formatDateTime = (start, end) => {
+    if (!start || !end) return '';
+    
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    
+    const dateOptions = { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' };
+    const timeOptions = { hour: '2-digit', minute: '2-digit' };
+    
+    const formattedDate = startDate.toLocaleDateString('de-DE', dateOptions);
+    const startTime = startDate.toLocaleTimeString('de-DE', timeOptions);
+    const endTime = endDate.toLocaleTimeString('de-DE', timeOptions);
+    
+    return `${formattedDate}, ${startTime} - ${endTime}`;
+  };
+
   return (
-    <Row>
-      <Col md="8">
-        <h2 data-cy="talkDetailsHeading">Talk</h2>
-        <dl className="jh-entity-details">
-          <dt>
-            <span id="id">ID</span>
-          </dt>
-          <dd>{talkEntity.id}</dd>
-          <dt>
-            <span id="title">Title</span>
-          </dt>
-          <dd>{talkEntity.title}</dd>
-          <dt>
-            <span id="speaker">Speaker</span>
-          </dt>
-          <dd>{talkEntity.speaker}</dd>
-          <dt>
-            <span id="abstractText">Abstract Text</span>
-          </dt>
-          <dd>{talkEntity.abstractText}</dd>
-          <dt>Room</dt>
-          <dd>{talkEntity.room ? talkEntity.room.name : ''}</dd>
-          <dt>Timeslot</dt>
-          <dd>
-            {talkEntity.timeslot
-              ? `${new Date(talkEntity.timeslot.start).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' })}: ${new Date(talkEntity.timeslot.start).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })} - ${new Date(talkEntity.timeslot.end).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' })}: ${new Date(talkEntity.timeslot.end).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })}`
-              : ''}
-          </dd>
-        </dl>
-        <Button tag={Link} to="/talk" replace color="info" data-cy="entityDetailsBackButton">
-          <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Zurück</span>
-        </Button>
-        &nbsp;
-        <Button tag={Link} to={`/talk/${talkEntity.id}/edit`} replace color="primary">
-          <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Bearbeiten</span>
-        </Button>
-      </Col>
-    </Row>
+    <div className="talk-detail-container">
+      <Row className="justify-content-center">
+        <Col md="8">
+          <Card className="shadow-sm mb-4">
+            <CardHeader className="bg-primary text-white">
+              <div className="d-flex justify-content-between align-items-center">
+                <h2 className="mb-0" data-cy="talkDetailsHeading">
+                  {talkEntity.title}
+                </h2>
+                <div>
+                  <Button tag={Link} to="/talk" replace color="light" className="me-2" data-cy="entityDetailsBackButton">
+                    <FontAwesomeIcon icon="arrow-left" /> <span>Zurück</span>
+                  </Button>
+                  <Button tag={Link} to={`/talk/${talkEntity.id}/edit`} replace color="light">
+                    <FontAwesomeIcon icon="pencil-alt" /> <span>Bearbeiten</span>
+                  </Button>
+                </div>
+              </div>
+            </CardHeader>
+            <CardBody>
+              <Row>
+                <Col md="8">
+                  <div className="mb-4">
+                    <h4 className="text-primary mb-3">
+                      <FontAwesomeIcon icon="user" className="me-2" />
+                      Speaker
+                    </h4>
+                    <p className="lead">{talkEntity.speaker}</p>
+                  </div>
+                  
+                  <div className="mb-4">
+                    <h4 className="text-primary mb-3">
+                      <FontAwesomeIcon icon="file-alt" className="me-2" />
+                      Abstract
+                    </h4>
+                    <div className="p-3 bg-light rounded">
+                      <p style={{ whiteSpace: 'pre-line' }}>{talkEntity.abstractText}</p>
+                    </div>
+                  </div>
+                </Col>
+                
+                <Col md="4">
+                  <div className="mb-4">
+                    <div className="card border-info">
+                      <div className="card-header bg-info text-white">
+                        <FontAwesomeIcon icon="info-circle" className="me-2" />
+                        Details
+                      </div>
+                      <ul className="list-group list-group-flush">
+                        <li className="list-group-item">
+                          <strong>ID:</strong> <Badge color="secondary">{talkEntity.id}</Badge>
+                        </li>
+                        <li className="list-group-item">
+                          <strong>
+                            <FontAwesomeIcon icon="map-marker-alt" className="me-1" /> Room:
+                          </strong>{' '}
+                          {talkEntity.room ? (
+                            <Link to={`/room/${talkEntity.room.id}`}>
+                              <Badge color="success">{talkEntity.room.name}</Badge>
+                            </Link>
+                          ) : (
+                            <Badge color="warning">Not assigned</Badge>
+                          )}
+                        </li>
+                        <li className="list-group-item">
+                          <strong>
+                            <FontAwesomeIcon icon="clock" className="me-1" /> Time:
+                          </strong>{' '}
+                          {talkEntity.timeslot ? (
+                            <div className="mt-2">
+                              <Link to={`/timeslot/${talkEntity.timeslot.id}`}>
+                                <Badge color="success" className="p-2">
+                                  {formatDateTime(talkEntity.timeslot.start, talkEntity.timeslot.end)}
+                                </Badge>
+                              </Link>
+                            </div>
+                          ) : (
+                            <Badge color="warning">Not scheduled</Badge>
+                          )}
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </Col>
+              </Row>
+            </CardBody>
+          </Card>
+        </Col>
+      </Row>
+    </div>
   );
 };
 
