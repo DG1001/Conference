@@ -140,7 +140,21 @@ export const Talk = () => {
                   <td>{talk.speaker}</td>
                   <td>{talk.abstractText}</td>
                   <td>{talk.room ? <Link to={`/room/${talk.room.id}`}>{talk.room.name}</Link> : ''}</td>
-                  <td>{talk.timeslot ? <Link to={`/timeslot/${talk.timeslot.id}`}>{talk.timeslot.id}</Link> : ''}</td>
+                  <td>
+                    {talk.timeslot ? (
+                      <Link to={`/timeslot/${talk.timeslot.id}`}>
+                        {`${new Date(talk.timeslot.start).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' })}. ${new Date(
+                          talk.timeslot.start,
+                        ).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })} - ${new Date(
+                          talk.timeslot.end,
+                        ).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' })}. ${new Date(
+                          talk.timeslot.end,
+                        ).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })}`}
+                      </Link>
+                    ) : (
+                      ''
+                    )}
+                  </td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`/talk/${talk.id}`} color="info" size="sm" data-cy="entityDetailsButton">
