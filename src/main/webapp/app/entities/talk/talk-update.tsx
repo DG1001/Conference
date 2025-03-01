@@ -77,27 +77,22 @@ export const TalkUpdate = () => {
   // Format timeslot display for dropdown
   const formatTimeslot = timeslot => {
     if (!timeslot) return '';
-    
     const startDate = new Date(timeslot.start);
     const endDate = new Date(timeslot.end);
-    
-    const dateOptions: Intl.DateTimeFormatOptions = { 
-      day: '2-digit', 
+    const dateOptions: Intl.DateTimeFormatOptions = {
+      day: '2-digit',
       month: '2-digit',
       year: 'numeric',
     };
-    const timeOptions: Intl.DateTimeFormatOptions = { 
-      hour: '2-digit', 
+    const timeOptions: Intl.DateTimeFormatOptions = {
+      hour: '2-digit',
       minute: '2-digit',
     };
-    
     const formattedDate = startDate.toLocaleDateString('de-DE', dateOptions);
     const startTime = startDate.toLocaleTimeString('de-DE', timeOptions);
     const endTime = endDate.toLocaleTimeString('de-DE', timeOptions);
-    
     return `${formattedDate}, ${startTime} - ${endTime}`;
   };
-
   return (
     <div className="talk-update-container">
       <Row className="justify-content-center">
@@ -105,7 +100,7 @@ export const TalkUpdate = () => {
           <Card className="shadow-sm mb-4">
             <CardHeader className="bg-primary text-white">
               <h2 className="mb-0" id="conferenceApp.talk.home.createOrEditLabel" data-cy="TalkCreateUpdateHeading">
-                <FontAwesomeIcon icon={isNew ? "plus-circle" : "edit"} className="me-2" />
+                <FontAwesomeIcon icon={isNew ? 'plus-circle' : 'edit'} className="me-2" />
                 {isNew ? 'Talk erstellen' : 'Talk bearbeiten'}
               </h2>
             </CardHeader>
@@ -130,7 +125,6 @@ export const TalkUpdate = () => {
                       </Col>
                     </Row>
                   ) : null}
-                  
                   <Row className="mb-3">
                     <Col md="3">
                       <label className="form-label" htmlFor="talk-title">
@@ -150,7 +144,6 @@ export const TalkUpdate = () => {
                       />
                     </Col>
                   </Row>
-                  
                   <Row className="mb-3">
                     <Col md="3">
                       <label className="form-label" htmlFor="talk-speaker">
@@ -170,7 +163,6 @@ export const TalkUpdate = () => {
                       />
                     </Col>
                   </Row>
-                  
                   <Row className="mb-3">
                     <Col md="3">
                       <label className="form-label" htmlFor="talk-abstractText">
@@ -191,7 +183,6 @@ export const TalkUpdate = () => {
                       />
                     </Col>
                   </Row>
-                  
                   <Row className="mb-3">
                     <Col md="3">
                       <label className="form-label" htmlFor="talk-room">
@@ -212,7 +203,6 @@ export const TalkUpdate = () => {
                       <small className="form-text text-muted">Dieses Feld wird benötigt.</small>
                     </Col>
                   </Row>
-                  
                   <Row className="mb-4">
                     <Col md="3">
                       <label className="form-label" htmlFor="talk-timeslot">
@@ -233,7 +223,6 @@ export const TalkUpdate = () => {
                       <small className="form-text text-muted">Dieses Feld wird benötigt.</small>
                     </Col>
                   </Row>
-                  
                   <div className="d-flex justify-content-end gap-2 mt-4">
                     <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/talk" replace color="secondary">
                       <FontAwesomeIcon icon="arrow-left" />
@@ -241,7 +230,7 @@ export const TalkUpdate = () => {
                       <span>Zurück</span>
                     </Button>
                     <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>
-                      <FontAwesomeIcon icon={updating ? "spinner" : "save"} spin={updating} />
+                      <FontAwesomeIcon icon={updating ? 'spinner' : 'save'} spin={updating} />
                       &nbsp; Speichern
                     </Button>
                   </div>
