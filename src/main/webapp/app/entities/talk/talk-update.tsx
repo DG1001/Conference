@@ -72,25 +72,8 @@ export const TalkUpdate = () => {
     }
   };
 
-  const defaultValues = () => {
-    if (isNew) {
-      return {};
-    }
-
-    // Make sure we have a valid entity with all required fields
-    if (!talkEntity || !talkEntity.id) {
-      return {};
-    }
-
-    return {
-      id: talkEntity.id,
-      title: talkEntity.title || '',
-      speaker: talkEntity.speaker || '',
-      abstractText: talkEntity.abstractText || '',
-      room: talkEntity.room ? talkEntity.room.id : '',
-      timeslot: talkEntity.timeslot ? talkEntity.timeslot.id : '',
-    };
-  };
+  // This function is kept for compatibility but we're using the memoized version
+  const defaultValues = () => formDefaultValues;
 
   // Format timeslot display for dropdown
   const formatTimeslot = timeslot => {
@@ -111,6 +94,26 @@ export const TalkUpdate = () => {
     const endTime = endDate.toLocaleTimeString('de-DE', timeOptions);
     return `${formattedDate}, ${startTime} - ${endTime}`;
   };
+  // Calculate form default values once when entity is loaded
+  const formDefaultValues = React.useMemo(() => {
+    if (isNew) {
+      return {};
+    }
+    
+    if (!talkEntity || !talkEntity.id) {
+      return {};
+    }
+    
+    return {
+      id: talkEntity.id,
+      title: talkEntity.title || '',
+      speaker: talkEntity.speaker || '',
+      abstractText: talkEntity.abstractText || '',
+      room: talkEntity.room ? talkEntity.room.id : '',
+      timeslot: talkEntity.timeslot ? talkEntity.timeslot.id : '',
+    };
+  }, [isNew, talkEntity]);
+
   return (
     <div className="talk-update-container">
       <Row className="justify-content-center">
@@ -130,7 +133,7 @@ export const TalkUpdate = () => {
                   </div>
                 </div>
               ) : (
-                <ValidatedForm key={talkEntity.id || 'new'} defaultValues={defaultValues()} onSubmit={saveEntity}>
+                <ValidatedForm key={talkEntity.id || 'new'} defaultValues={formDefaultValues} onSubmit={saveEntity}>
                   {!isNew ? (
                     <Row className="mb-3">
                       <Col md="3">
