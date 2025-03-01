@@ -1,0 +1,33 @@
+{
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "jwt",
+    "baseName": "conference",
+    "buildTool": "maven",
+    "cacheProvider": "ehcache",
+    "clientFramework": "react",
+    "clientTestFrameworks": [],
+    "clientTheme": "minty",
+    "clientThemeVariant": "primary",
+    "creationTimestamp": 1740791615062,
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "enableHibernateCache": true,
+    "enableTranslation": false,
+    "entities": [],
+    "feignClient": null,
+    "jhipsterVersion": "8.9.0",
+    "jwtSecretKey": "ODg4YzQxMWU3ZTg4MjA2NzAzOTc5OGI4ZDkxNzY1NzlhZDlkYzZlZGQxYzJjMTdkMTFmNTFiYzhmYTVjOTlkMGRjNDdkZjBlMmFkYWEyOTFlM2ZlZmRmNDcwMTRhODI4MGRkOTY5NDFiZjQzN2YwYjI2Yzk4ZjM1ZjMxY2E3OWU=",
+    "microfrontend": null,
+    "microfrontends": [],
+    "nativeLanguage": "de",
+    "packageName": "de.xares.conference",
+    "prodDatabaseType": "postgresql",
+    "reactive": false,
+    "serverPort": null,
+    "serviceDiscoveryType": null,
+    "syncUserWithIdp": null,
+    "testFrameworks": [],
+    "withAdminUi": true
+  }
+}
