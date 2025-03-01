@@ -191,7 +191,9 @@ export const TalkUpdate = () => {
                     </Col>
                     <Col md="9">
                       <ValidatedField id="talk-room" name="room" data-cy="room" type="select" required>
-                        <option value="" key="0">-- Select Room --</option>
+                        <option value="" key="0">
+                          -- Select Room --
+                        </option>
                         {rooms
                           ? rooms.map(otherEntity => (
                               <option value={otherEntity.id} key={otherEntity.id}>
@@ -211,7 +213,9 @@ export const TalkUpdate = () => {
                     </Col>
                     <Col md="9">
                       <ValidatedField id="talk-timeslot" name="timeslot" data-cy="timeslot" type="select" required>
-                        <option value="" key="0">-- Select Timeslot --</option>
+                        <option value="" key="0">
+                          -- Select Timeslot --
+                        </option>
                         {timeslots
                           ? timeslots.map(otherEntity => (
                               <option value={otherEntity.id} key={otherEntity.id}>
