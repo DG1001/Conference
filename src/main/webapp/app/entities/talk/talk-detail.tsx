@@ -18,25 +18,25 @@ export const TalkDetail = () => {
   // Format date and time for display
   const formatDateTime = (start, end) => {
     if (!start || !end) return '';
-    
+
     const startDate = new Date(start);
     const endDate = new Date(end);
-    
-    const dateOptions: Intl.DateTimeFormatOptions = { 
-      weekday: 'long', 
-      day: '2-digit', 
-      month: '2-digit', 
-      year: 'numeric' 
+
+    const dateOptions: Intl.DateTimeFormatOptions = {
+      weekday: 'long',
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
     };
-    const timeOptions: Intl.DateTimeFormatOptions = { 
-      hour: '2-digit', 
-      minute: '2-digit' 
+    const timeOptions: Intl.DateTimeFormatOptions = {
+      hour: '2-digit',
+      minute: '2-digit'
     };
-    
+
     const formattedDate = startDate.toLocaleDateString('de-DE', dateOptions);
     const startTime = startDate.toLocaleTimeString('de-DE', timeOptions);
     const endTime = endDate.toLocaleTimeString('de-DE', timeOptions);
-    
+
     return `${formattedDate}, ${startTime} - ${endTime}`;
   };
 
