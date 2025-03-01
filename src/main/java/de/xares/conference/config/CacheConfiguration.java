@@ -50,6 +50,9 @@ public class CacheConfiguration {
             createCache(cm, de.xares.conference.domain.User.class.getName());
             createCache(cm, de.xares.conference.domain.Authority.class.getName());
             createCache(cm, de.xares.conference.domain.User.class.getName() + ".authorities");
+            createCache(cm, de.xares.conference.domain.Room.class.getName());
+            createCache(cm, de.xares.conference.domain.Timeslot.class.getName());
+            createCache(cm, de.xares.conference.domain.Talk.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

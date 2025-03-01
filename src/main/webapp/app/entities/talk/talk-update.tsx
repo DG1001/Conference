@@ -99,11 +99,11 @@ export const TalkUpdate = () => {
     if (isNew) {
       return {};
     }
-    
+
     if (!talkEntity || !talkEntity.id) {
       return {};
     }
-    
+
     return {
       id: talkEntity.id,
       title: talkEntity.title || '',

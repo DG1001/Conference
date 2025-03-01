@@ -70,7 +70,6 @@ export const TalkDetail = () => {
                     </h4>
                     <p className="lead">{talkEntity.speaker}</p>
                   </div>
-                  
                   <div className="mb-4">
                     <h4 className="text-primary mb-3">
                       <FontAwesomeIcon icon="file-alt" className="me-2" />
@@ -81,7 +80,6 @@ export const TalkDetail = () => {
                     </div>
                   </div>
                 </Col>
-                
                 <Col md="4">
                   <div className="mb-4">
                     <div className="card border-info">
