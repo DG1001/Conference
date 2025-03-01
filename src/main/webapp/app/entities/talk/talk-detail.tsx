@@ -44,7 +44,7 @@ export const TalkDetail = () => {
           <dt>Timeslot</dt>
           <dd>
             {talkEntity.timeslot
-              ? `${new Date(talkEntity.timeslot.start).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' })}. ${new Date(talkEntity.timeslot.start).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })} - ${new Date(talkEntity.timeslot.end).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' })}. ${new Date(talkEntity.timeslot.end).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })}`
+              ? `${new Date(talkEntity.timeslot.start).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' })}: ${new Date(talkEntity.timeslot.start).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })} - ${new Date(talkEntity.timeslot.end).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' })}: ${new Date(talkEntity.timeslot.end).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })}`
               : ''}
           </dd>
         </dl>
