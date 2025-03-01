@@ -1,21 +1,46 @@
 import React, { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Button, Col, Row, Card, CardHeader, CardBody, Badge } from 'reactstrap';
+import { Button, Col, Row, Card, CardHeader, CardBody, Badge, Alert } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { getEntity } from './talk.reducer';
 
 export const TalkDetail = () => {
   const dispatch = useAppDispatch();
-
   const { id } = useParams<'id'>();
 
-  useEffect(() => {
-    dispatch(getEntity(id));
-  }, []);
-
   const talkEntity = useAppSelector(state => state.talk.entity);
-  // Format date and time for display
+  const loading = useAppSelector(state => state.talk.loading);
+
+  useEffect(() => {
+    console.log('Fetching talk with ID:', id);
+    dispatch(getEntity(id));
+  }, [id, dispatch]);
+
+  if (loading) {
+    return (
+      <div className="talk-detail-container">
+        <Row className="justify-content-center">
+          <Col md="8">
+            <Alert color="info">Loading talk details...</Alert>
+          </Col>
+        </Row>
+      </div>
+    );
+  }
+
+  if (!talkEntity || !talkEntity.id) {
+    return (
+      <div className="talk-detail-container">
+        <Row className="justify-content-center">
+          <Col md="8">
+            <Alert color="warning">Talk not found or failed to load.</Alert>
+          </Col>
+        </Row>
+      </div>
+    );
+  }
+
   const formatDateTime = (start, end) => {
     if (!start || !end) return '';
 

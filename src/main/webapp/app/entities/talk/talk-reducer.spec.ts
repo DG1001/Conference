@@ -133,6 +133,7 @@ describe('Entities reducer tests', () => {
         ...initialState,
         loading: false,
         entity: payload.data,
+        totalItems: 0,
       });
     });
 
