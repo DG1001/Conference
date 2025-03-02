@@ -13,7 +13,6 @@ export const TalkDetail = () => {
   const loading = useAppSelector(state => state.talk.loading);
 
   useEffect(() => {
-    console.log('Fetching talk with ID:', id);
     dispatch(getEntity(id));
   }, [id, dispatch]);
 
